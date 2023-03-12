@@ -11,56 +11,47 @@ import (
 )
 
 func Run() {
-	check := os.Args
-	if len(check) == 2 {
-		fileName := check[1]
+	if len(os.Args) == 2 {
+		fileName := os.Args[1]
 
 		// Get from file data
-		fileContent, err := os.ReadFile(fileName)
-		if err != nil {
-			log.Fatal(err)
-		}
+		data := getDataFromFile(fileName)
 
-		// Split data
-		array := strings.Fields(string(fileContent))
-
-		// Preparation
-		sort.Strings(array)
-		numberOfArray := len(array)
-		medianPosition := numberOfArray / 2 // for Median
-		sumOfArray, dataErr := Sum(array)
+		// Sort data for median
+		sort.Strings(data)
+		numberOfData := len(data)
+		medianPosition := numberOfData / 2 // for Median
+		sumOfArray, dataErr := Sum(data)
 		if dataErr != nil {
 			log.Fatal(dataErr)
 			return
 		}
 
 		// Calculation
-		average := calculateAverage(sumOfArray, numberOfArray)
-		variance := calculateVariance(array, average, numberOfArray)
+		average := calculateAverage(sumOfArray, numberOfData)
+		variance := calculateVariance(data, average, numberOfData)
 		standardDeviation := math.Sqrt(variance)
-		median := calculateMedian(array[medianPosition], array[medianPosition-1], numberOfArray)
+		median := calculateMedian(data[medianPosition], data[medianPosition-1], numberOfData)
 
 		// Result Print
-		_number := int(math.Round(average))
-		number := strconv.Itoa(_number)
+		number := strconv.Itoa(int(math.Round(average)))
 		fmt.Printf("Average: %s\n", number)
-
-		_number = int(math.Round(median))
-		number = strconv.Itoa(_number)
+		number = strconv.Itoa(int(math.Round(median)))
 		fmt.Printf("Median: %s\n", number)
-
-		_number = int(math.Round(variance))
-		number = strconv.Itoa(_number)
+		number = strconv.Itoa(int(math.Round(variance)))
 		fmt.Printf("Variance: %s\n", number)
-
-		_number = int(math.Round(standardDeviation))
-		number = strconv.Itoa(_number)
+		number = strconv.Itoa(int(math.Round(standardDeviation)))
 		fmt.Printf("Standard Deviation: %s\n", number)
-
-	} else {
-		fmt.Println("Please enter arguments: a source.txt")
-		os.Exit(1)
 	}
+}
+
+func getDataFromFile(fileName string) []string {
+	fileContent, err := os.ReadFile(fileName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	data := strings.Fields(string(fileContent))
+	return data
 }
 
 func Sum(arr []string) (int, error) {
