@@ -20,9 +20,9 @@ node main.js <file_path>
 ```
 python main.py <file_path>
 ```
-### PYTHON
+### DART
 ```
-dart main.py <file_path>
+dart main.dart <file_path>
 ```
 
 ##  Steps
